@@ -2,6 +2,9 @@ package dci.dsc.model;
 
 public class ConnInfo {
 	private String cname,type,name,ip,ac,pw,port;
+//	public ConnInfo(){
+//		
+//	}
 	public ConnInfo(String cname,String type,String name,String ip,String ac,String pw,String port){
 		this.cname=cname;
 		this.type=type;
@@ -11,6 +14,9 @@ public class ConnInfo {
 		this.pw=pw;
 		this.port=port;
 	}
+//	public String setInfo(String cname,String type,String name,String ip,String ac,String pw,String port){
+//		return cname+";"+type+";"+name+";"+ip+";"+ac+";"+pw+";"+port;
+//	}
 	public ConnInfo(String row){
 		String[] data=row.split(";");
 		this.cname=data[0];
