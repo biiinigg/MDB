@@ -12,5 +12,20 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Spring"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Tools"/>
 	<classpathentry kind="lib" path="jgoodies-forms-1.8.0.jar" sourcepath="jgoodies-forms-1.8.0-sources.jar"/>
+	<classpathentry kind="lib" path="jar/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="jar/Apache/commons-codec-1.9.jar"/>
+	<classpathentry kind="lib" path="jar/Apache/commons-dbcp-1.4.jar"/>
+	<classpathentry kind="lib" path="jar/Apache/commons-fileupload-1.3.1.jar"/>
+	<classpathentry kind="lib" path="jar/Apache/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="jar/Apache/commons-pool-1.6.jar"/>
+	<classpathentry kind="lib" path="jar/Apache/httpclient-4.5.jar"/>
+	<classpathentry kind="lib" path="jar/Apache/httpcore-4.4.1.jar"/>
+	<classpathentry kind="lib" path="jar/Apache/mybatis-3.2.8.jar"/>
+	<classpathentry kind="lib" path="jar/Apache/org.apache.commons.logging_1.1.1.v201101211721.jar"/>
+	<classpathentry kind="lib" path="jar/Apache/poi-3.13-20150929.jar"/>
+	<classpathentry kind="lib" path="jar/JDBC-Driver/ifxjdbc.jar"/>
+	<classpathentry kind="lib" path="jar/JDBC-Driver/mysql-connector-java-5.1.32-bin.jar"/>
+	<classpathentry kind="lib" path="jar/JDBC-Driver/oracle.jar"/>
+	<classpathentry kind="lib" path="jar/JDBC-Driver/sqljdbc4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

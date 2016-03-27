@@ -16,7 +16,7 @@ import dci.dsc.mainmethods.DBInfoFile;
 public class ConnController {
 	private static DBInfoFile dif=new DBInfoFile();
 	public void save(JTable table) {
-		dif.write(table);
+		dif.writeFromTable(table);
 	}
 
 	public void init(JTable table) {

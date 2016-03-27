@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<DBConfig> 
+  <MYSQL>a;MYSQL;a;localhost;a;a;3306</MYSQL>  
+  <ORACLE>b;ORACLE;b;localhost;b;b;1521</ORACLE>  
+  <SQLSERVER>c;SQLSERVER;EKB;localhost;sa;dsc;1433</SQLSERVER> 
+</DBConfig>
