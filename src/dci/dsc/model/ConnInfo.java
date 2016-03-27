@@ -2,6 +2,7 @@ package dci.dsc.model;
 
 public class ConnInfo {
 	private String cname,type,name,ip,ac,pw,port;
+	private String maxActive,minIdle,maxIdle,maxWait,RemoveAbandoned,RemoveAbandonedTimeout;
 //	public ConnInfo(){
 //		
 //	}
@@ -14,9 +15,38 @@ public class ConnInfo {
 		this.pw=pw;
 		this.port=port;
 	}
+	public void initProperties(){
+		maxActive="50";
+		minIdle="5";
+		maxIdle="20";
+		maxWait="60000";
+		RemoveAbandoned="false";
+		RemoveAbandonedTimeout="300";
+	}
+	public String maxActive(){
+		return maxActive;
+	}
+	public String minIdle(){
+		return minIdle;
+	}
+	public String maxIdle(){
+		return maxIdle;
+	}
+	public String maxWait(){
+		return maxWait;
+	}
+	public String RemoveAbandoned(){
+		return RemoveAbandoned;
+	}
+	public String RemoveAbandonedTimeout(){
+		return RemoveAbandonedTimeout;
+	}
 //	public String setInfo(String cname,String type,String name,String ip,String ac,String pw,String port){
 //		return cname+";"+type+";"+name+";"+ip+";"+ac+";"+pw+";"+port;
 //	}
+	public String getRow(){
+		return cname+";"+type+";"+name+";"+ip+";"+ac+";"+pw+";"+port;
+	}
 	public ConnInfo(String row){
 		String[] data=row.split(";");
 		this.cname=data[0];
