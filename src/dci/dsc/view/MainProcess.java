@@ -114,7 +114,7 @@ public class MainProcess {
 		scrollPane.setBounds(11, 299, 707, 253);
 		frame.getContentPane().add(scrollPane);
 		
-		JTextArea textArea = new JTextArea();
+		final JTextArea textArea = new JTextArea();
 		scrollPane.setViewportView(textArea);
 
 		JScrollPane scrollPane_1 = new JScrollPane();
