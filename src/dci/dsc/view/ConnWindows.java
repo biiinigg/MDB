@@ -120,7 +120,7 @@ public class ConnWindows {
 		String[] array = getdata().split(";");
 		for (int i = 0; i < array.length; i++) {
 			if ("".equals(array[i])) {
-				JOptionPane.showMessageDialog(getJframe(), "不允許空白，請填寫完整資料。", "提示訊息", JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(getJframe(), "不允許空白，請填寫完整資料。", "提示訊息", JOptionPane.ERROR_MESSAGE);
 				resultbool = false;
 				break;
 			}

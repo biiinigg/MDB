@@ -19,7 +19,6 @@ public class dbcp {
 	public static DataSource sqlserverDataSource;
 	private static String dbtype;
 	public dbcp() {
-		System.out.println("init");
 	}
 	public static void init(String _type){
 		dbtype = _type;
@@ -49,7 +48,7 @@ public class dbcp {
 		return driverName;
 	}
 
-	public static DataSource createConnectionPool(ConnInfo infos) {
+	public static DataSource createConnectionPool(ConnInfo infos) throws Exception {
 		DataSource ds = null;
 		Connection conn = null;
 		try {
@@ -73,8 +72,7 @@ public class dbcp {
 			}
 		} catch (Exception ex) {
 			ds = null;
-			System.err.println(
-					ex.getClass().getName() + ": " + infos.cname() + " connect fail" + " " + ex.getMessage());
+			throw new Exception(ex.getClass().getName()+" :\n " + infos.cname()+ " connect fail \n" +ex.getMessage());
 		} finally {
 			try {
 				if (conn != null && !conn.isClosed()) {
@@ -99,7 +97,7 @@ public class dbcp {
 		return exist;
 	}
 
-	public static void createDataSource(ConnInfo DBInfo) {
+	public static void createDataSource(ConnInfo DBInfo)throws Exception {
 		if(!dbcp.isDataSourceExist()){
 			try {
 				if (dbtype == MYSQL) {
@@ -112,13 +110,13 @@ public class dbcp {
 					System.err.println("DataSource: Connection type setting error " + dbtype.toString());
 				}
 			} catch (Exception ex) {
-				ex.printStackTrace();
-				System.err.println("DataSource: create error!");
+				//ex.printStackTrace();
+				throw new Exception(ex.getClass().getName()+" :\n "+ex.getMessage());
 			}
 		}
 	}
 
-	public static Connection getConnection() {
+	public static Connection getConnection() throws Exception {
 		Connection conn = null;
 		try {
 			if (dbtype == MYSQL) {
@@ -129,7 +127,8 @@ public class dbcp {
 				conn = sqlserverDataSource.getConnection();
 			}
 		} catch (SQLException ex) {
-			ex.printStackTrace();
+			//ex.printStackTrace();
+			throw new Exception(ex.getClass().getName()+" :\n "+ex.getMessage());
 		}
 		return conn;
 	}

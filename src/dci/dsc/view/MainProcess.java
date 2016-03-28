@@ -21,6 +21,8 @@ import javax.swing.JTextArea;
 import com.dci.dsc.dbcp;
 
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+import java.awt.Color;
 
 public class MainProcess {
 	private final String MYSQL = DBEnum.Type.MYSQL.toString();
@@ -57,7 +59,7 @@ public class MainProcess {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("跨資料庫系統");
-		frame.setBounds(100, 100, 759, 729);
+		frame.setBounds(100, 100, 759, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
@@ -95,7 +97,7 @@ public class MainProcess {
 
 		final JCheckBox checkMS = new JCheckBox("");
 		checkMS.setSelected(true);
-		checkMS.setBounds(11, 55, 21, 23);
+		checkMS.setBounds(11, 93, 21, 23);
 		frame.getContentPane().add(checkMS);
 
 		final JCheckBox checkMY = new JCheckBox("");
@@ -105,57 +107,65 @@ public class MainProcess {
 
 		final JCheckBox checkOra = new JCheckBox("");
 		checkOra.setSelected(true);
-		checkOra.setBounds(11, 93, 21, 23);
+		checkOra.setBounds(11, 55, 21, 23);
 		frame.getContentPane().add(checkOra);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(11, 400, 707, 253);
+		scrollPane.setBounds(11, 299, 707, 253);
 		frame.getContentPane().add(scrollPane);
-
-		JList list = new JList();
-		scrollPane.setViewportView(list);
+		
+		JTextArea textArea = new JTextArea();
+		scrollPane.setViewportView(textArea);
 
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(11, 129, 707, 253);
+		scrollPane_1.setBounds(11, 129, 707, 150);
 		frame.getContentPane().add(scrollPane_1);
 
-		final JTextArea textArea = new JTextArea();
-		scrollPane_1.setViewportView(textArea);
-
+		final JTextArea txtrSelectFrom = new JTextArea();
+		txtrSelectFrom.setBackground(Color.WHITE);
+		txtrSelectFrom.setText("select * from Sql_Info");
+		scrollPane_1.setViewportView(txtrSelectFrom);
 		JButton button = new JButton("檢核");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				String errorMsg="";
+				Connection conn=null;
+				PreparedStatement ps=null;
+				ResultSet rs=null;
 				try {
 					Dom4j xml = new Dom4j();
-					for(String type:xml.read().keySet()){
-						if(!checkMS.isSelected()&&type.equals(SQLSERVER)){
-							break;
-						}else if(!checkOra.isSelected()&&type.equals(ORACLE)){
-							break;
-						}else if(!checkMY.isSelected()&&type.equals(MYSQL)){
-							break;
+					for (String type : xml.read().keySet()) {
+						if (!checkMS.isSelected() && type.equals(SQLSERVER)) {
+							continue;
+						} else if (!checkOra.isSelected() && type.equals(ORACLE)) {
+							continue;
+						} else if (!checkMY.isSelected() && type.equals(MYSQL)) {
+							continue;
 						}
-//						if(type.equals(SQLSERVER)){
-							
-							dbcp.init(type);
-							ConnInfo DBInfo = xml.read().get(type);
-							dbcp.createDataSource(DBInfo);
-							Connection conn = dbcp.getConnection();
-							PreparedStatement ps = conn.prepareStatement(textArea.getText(), ResultSet.TYPE_SCROLL_INSENSITIVE,
-									ResultSet.CONCUR_READ_ONLY);
-							ResultSet rs = ps.executeQuery();
-							String tmp="";
-							if (rs.next()) {
-								for(int i=1;i<rs.getMetaData().getColumnCount();i++){
-									tmp+=rs.getMetaData().getColumnName(i)+";";
-								}
-								System.out.println(tmp.substring(0,tmp.length()-1));
+						dbcp.init(type);
+						ConnInfo DBInfo = xml.read().get(type);
+						errorMsg="DB Type:"+ DBInfo.type()+"\n"+ DBInfo.cname()+" : 檢核失敗。\n";
+						dbcp.createDataSource(DBInfo);
+						conn = dbcp.getConnection();
+						ps = conn.prepareStatement(txtrSelectFrom.getText(),
+								ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+						rs = ps.executeQuery();
+						String tmp = "";
+						if (rs.next()) {
+							for (int i = 1; i < rs.getMetaData().getColumnCount(); i++) {
+								tmp += rs.getMetaData().getColumnName(i) + ";";
 							}
-							dbcp.releaseDataSource(conn,ps,rs);
+							System.out.println(tmp.substring(0, tmp.length() - 1));
 						}
-//					}
+						
+						//dbcp.releaseDataSource(conn, ps, rs);
+						JOptionPane.showMessageDialog(frame,"DB Type:"+ DBInfo.type()+"\n"+ DBInfo.cname()+" : 檢核成功。"
+								+ "", "提示訊息", JOptionPane.PLAIN_MESSAGE);
+					}
 				} catch (Exception ex) {
+					dbcp.releaseDataSource(conn, ps, rs);
 					ex.printStackTrace();
+					JOptionPane.showMessageDialog(frame,errorMsg+ ex.getMessage().trim(), "提示訊息", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
