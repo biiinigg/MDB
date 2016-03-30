@@ -19,6 +19,7 @@ public class dbcp {
 	public static DataSource sqlserverDataSource;
 	private static String dbtype;
 	public dbcp() {
+		System.out.println();
 	}
 	public static void init(String _type){
 		dbtype = _type;
