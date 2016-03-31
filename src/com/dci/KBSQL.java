@@ -12,7 +12,7 @@ public class KBSQL {
 	}
 
 	public static enum METHOD {
-		HasParam, ParamTypes, RETURN, CLASS, PackageClass;
+		HasParam, ParamTypes, RETURN, CLASS, PackageClass,MY,SQL,ORA,MYEXC,SQLEXC,ORAEXC;
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class KBSQL {
 	 *         <enum,Object> @param return:String HashMap <enum,Object> @param
 	 *         packageClass:String HashMap <enum,Object> @param class:String
 	 */
-	public void parseALLMethods(String[] packageClassPathNames) {
+	public TreeMap<String, HashMap<METHOD, Object>> parseALLMethods(String[] packageClassPathNames) {
 		TreeMap<String, HashMap<METHOD, Object>> map = new TreeMap<String, HashMap<METHOD, Object>>();
 		String packageClassName = "";
 		for (int j = 0; j < packageClassPathNames.length; j++) {
@@ -104,6 +104,7 @@ public class KBSQL {
 
 			}
 		}
+		return map;
 		// str2json(map);
 		// str2listPython(map);
 	}

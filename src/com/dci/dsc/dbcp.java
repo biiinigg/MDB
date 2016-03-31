@@ -19,10 +19,6 @@ public class dbcp {
 	public static DataSource sqlserverDataSource;
 	private static String dbtype;
 	public dbcp() {
-		System.out.println();
-	}
-	public static void init(String _type){
-		dbtype = _type;
 	}
 	public static String getUrl(String dbtype, String addr, String port, String dbname) {
 		String url = null;
@@ -69,7 +65,7 @@ public class dbcp {
 
 				ds = BasicDataSourceFactory.createDataSource(dsProperties);
 				conn = ds.getConnection();
-				System.out.println(infos.cname() + " connected!");
+				System.out.println("Connection Name : "+infos.cname() + " connected!");
 			}
 		} catch (Exception ex) {
 			ds = null;
@@ -98,7 +94,8 @@ public class dbcp {
 		return exist;
 	}
 
-	public static void createDataSource(ConnInfo DBInfo)throws Exception {
+	public static void createDataSource(ConnInfo DBInfo,String _type)throws Exception {
+		dbtype = _type;
 		if(!dbcp.isDataSourceExist()){
 			try {
 				if (dbtype == MYSQL) {

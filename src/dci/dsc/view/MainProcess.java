@@ -142,10 +142,9 @@ public class MainProcess {
 						} else if (!checkMY.isSelected() && type.equals(MYSQL)) {
 							continue;
 						}
-						dbcp.init(type);
 						ConnInfo DBInfo = xml.read().get(type);
 						errorMsg="DB Type:"+ DBInfo.type()+"\n"+ DBInfo.cname()+" : 檢核失敗。\n";
-						dbcp.createDataSource(DBInfo);
+						dbcp.createDataSource(DBInfo,type);
 						conn = dbcp.getConnection();
 						ps = conn.prepareStatement(txtrSelectFrom.getText(),
 								ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
