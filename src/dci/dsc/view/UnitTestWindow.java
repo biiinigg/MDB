@@ -26,6 +26,7 @@ import java.util.TreeMap;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
 
+import com.dci.Compile;
 import com.dci.KBSQL;
 import com.dci.KBSQL.METHOD;
 import com.dci.dsc.dbcp;
@@ -38,6 +39,7 @@ public class UnitTestWindow {
 	private final String ORACLE = DBEnum.Type.ORACLE.toString();
 	private final String SQLSERVER = DBEnum.Type.SQLSERVER.toString();
 	private static TreeMap<String, HashMap<METHOD, Object>> classInfo = null;
+	public static boolean userMode=true;
 	private JFrame frame;
 	private JTextField urlField;
 	private JTextPane textPane;
@@ -103,10 +105,16 @@ public class UnitTestWindow {
 		JButton button = new JButton("擷取檔案");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String projectCD = urlField.getText();
-				String[] fileListArr = textPane.getText().split("\r");
-				new CopyFile().copyFile(projectCD, fileListArr);
-				JOptionPane.showMessageDialog(frame, "Export ok!");
+				try {
+					String projectCD = urlField.getText();
+					String[] fileListArr = textPane.getText().split("\r");
+					CopyFile file=new CopyFile();
+					file.copyFile(projectCD, file.transFileList(fileListArr));
+					JOptionPane.showMessageDialog(frame, "Export ok!");
+				} catch (Exception e2) {
+					// TODO: handle exception
+					e2.printStackTrace();
+				}
 			}
 		});
 		button.setBounds(10, 206, 87, 23);
@@ -280,7 +288,7 @@ public class UnitTestWindow {
 			exception = METHOD.ORAEXC;
 		}
 		for (String methodName : classInfo.keySet()) {
-			if (classInfo.get(methodName).get(type) != null && (boolean) classInfo.get(methodName).get(METHOD.SQL)) {
+			if (classInfo.get(methodName).get(type) != null && (boolean) classInfo.get(methodName).get(type)) {
 				successCount++;
 				successMethod += (String) classInfo.get(methodName).get(METHOD.CLASS) + "." + methodName + "\n";
 			} else if (classInfo.get(methodName).get(type) == null) {
@@ -301,7 +309,16 @@ public class UnitTestWindow {
 	}
 
 	private TreeMap<String, HashMap<METHOD, Object>> getClassInfo() {
-		String[] fileListArr = textPane.getText().split("\r");
-		return new KBSQL().parseALLMethods(new KBSQL().transPackageClass(fileListArr));
+		String[] paths = textPane.getText().split("\r");
+		KBSQL kb=new KBSQL();
+		TreeMap<String, HashMap<METHOD, Object>> data =null;
+		String[] pathList=kb.transPackageClass(paths);
+		if(userMode){
+			new Compile().run(paths);
+			data= kb.parseALLMethodsByUserMode(pathList);
+		}else{
+			data= kb.parseALLMethods(pathList);
+		}
+		return data;
 	}
 }

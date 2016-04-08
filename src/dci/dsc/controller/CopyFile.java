@@ -6,7 +6,17 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import dci.dsc.view.UnitTestWindow;
+
 public class CopyFile {
+	public String[] transFileList(String[] fileListArr){
+		if(!UnitTestWindow.userMode){
+			for(int i=0;i<fileListArr.length;i++){
+				fileListArr[i]=fileListArr[i].replaceFirst("/KanBan/", "/");
+			}
+		}
+		return fileListArr;
+	}
 	public void newFolder(String folderPath) {
 		try {
 			String filePath = folderPath;
@@ -26,20 +36,19 @@ public class CopyFile {
 		String tmp = "";
 		String userDir = System.getProperty("user.dir");
 		userDir = userDir.replaceAll("\\\\", "/");
-		System.out.println("userdir:" + userDir);
 		currFolder = currFolder.replaceAll("\\\\", "/");
 		if (currFolder.endsWith("/")) {
 			currFolder = currFolder.substring(0, currFolder.length() - 1);
 		}
-		System.out.println(currFolder);
 		for (int i = 0; i < fileList.length; i++) {
 			if (!fileList[i].contains("--")) {
 				tmp = currFolder + fileList[i].trim();
 				tmp = tmp.replaceAll("\\s", "");
 				System.out.println(tmp);
+				System.out.println("copy from src:"+tmp);
 				File src = new File(tmp);
-				System.out.println(userDir + fileList[i].trim().replaceFirst("/KanBan/", "/"));
-				File dst = new File(userDir + fileList[i].trim().replaceFirst("/KanBan/", "/"));
+				System.out.println("copy to dest:"+userDir + fileList[i].trim());
+				File dst = new File(userDir + fileList[i].trim());
 				copy(src, dst);
 			}
 		}

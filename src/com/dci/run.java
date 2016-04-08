@@ -5,25 +5,19 @@ import java.net.URLClassLoader;
 public class run {
 	public static void type(){
 		try{
-			URL url = new URL("file:/D:/MDBT/ClassLoader/KanBan/src/com/dsc/dci/sqlcode/main/");
+			System.out.println(System.getProperty("user.dir"));
+			URL url = new URL("file:/D:/MDBT/ClassLoader/KanBan/src/");
 			ClassLoader urlClassLoader = new URLClassLoader(new URL[] {url});
-			//Class c = urlClassLoader.loadClass("sqlTask");
-			Class clazz = Class.forName("sqlTask");
-			System.out.println(clazz.getName());
+			Class clazz = urlClassLoader.loadClass("com.dsc.dci.sqlcode.main.sqlTask");
+			Object obj=clazz.newInstance();
+			System.out.println(clazz.getClassLoader()+"；"+clazz.getName());
+			System.out.println(clazz.getDeclaredMethods()[0].invoke(obj, null));
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
 	}
 	public static void main(String[] args){
 		try{
-//			String path=System.getProperty("user.dir");
-//			System.out.println(path);
-//			KBClassLoader loader=new KBClassLoader();
-//			String classname="com.dsc.dci.sqlcode.main.sqlTask";
-//			Class clazz = Class.forName(classname);
-////			Class clazz = loader.loadClass(classname);
-//			System.out.println(clazz.getName());
-			//loader.findClass("com.dsc.dci.sqlcode.main.sqlTask");
 			type();
 		}catch(Exception ex){
 			ex.printStackTrace();
