@@ -5,10 +5,11 @@ import java.net.URLClassLoader;
 public class run {
 	public static void type(){
 		try{
-			URL url = new URL("file:/D:/MDBT/ClassLoader/KanBan/src");
+			URL url = new URL("file:/D:/MDBT/ClassLoader/KanBan/src/com/dsc/dci/sqlcode/main/");
 			ClassLoader urlClassLoader = new URLClassLoader(new URL[] {url});
-			Class c = urlClassLoader.loadClass("sqlTask");
-			System.out.println(c.getName());
+			//Class c = urlClassLoader.loadClass("sqlTask");
+			Class clazz = Class.forName("sqlTask");
+			System.out.println(clazz.getName());
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
