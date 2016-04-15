@@ -1,5 +1,6 @@
 package dci.dsc.view;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -25,6 +26,11 @@ import java.util.HashMap;
 import java.util.TreeMap;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 import com.dci.Compile;
 import com.dci.KBSQL;
@@ -39,14 +45,14 @@ public class UnitTestWindow {
 	private final String ORACLE = DBEnum.Type.ORACLE.toString();
 	private final String SQLSERVER = DBEnum.Type.SQLSERVER.toString();
 	private static TreeMap<String, HashMap<METHOD, Object>> classInfo = null;
-	public static boolean userMode=true;
+	public static boolean userMode = true;
 	private JFrame frame;
 	private JTextField urlField;
-	private JTextPane textPane;
+	private static JTextPane textPane;
 	private JCheckBox cmssql;
 	private JCheckBox coracle;
 	private JCheckBox cmysql;
-	private JTextArea textArea;
+	private static JTextArea textArea;
 
 	/**
 	 * Launch the application.
@@ -108,7 +114,7 @@ public class UnitTestWindow {
 				try {
 					String projectCD = urlField.getText();
 					String[] fileListArr = textPane.getText().split("\r");
-					CopyFile file=new CopyFile();
+					CopyFile file = new CopyFile();
 					file.copyFile(projectCD, file.transFileList(fileListArr));
 					JOptionPane.showMessageDialog(frame, "Export ok!");
 				} catch (Exception e2) {
@@ -144,14 +150,14 @@ public class UnitTestWindow {
 		});
 		btnNewButton.setBounds(325, 235, 87, 23);
 		frame.getContentPane().add(btnNewButton);
-		
+
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(10, 274, 414, 175);
 		frame.getContentPane().add(scrollPane_1);
-		
+
 		textArea = new JTextArea();
 		scrollPane_1.setViewportView(textArea);
-		
+
 		JButton btnlog = new JButton("清除LOG");
 		btnlog.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -186,15 +192,38 @@ public class UnitTestWindow {
 		}
 		return boolResult;
 	}
-	private void log(String msg){
-		textArea.append(getTime()+"\n"+msg+"\n");
+
+	public static void log(String msg) {
+		textArea.append(getTime() + "\n" + msg + "\n");
 		textArea.paintImmediately(textArea.getBounds());
 	}
-	public static String getTime(){
+
+	public static void insertlog(String str) {
+		SimpleAttributeSet attrSet = new SimpleAttributeSet();
+		StyleConstants.setForeground(attrSet, Color.RED);
+		Document doc = textPane.getDocument();
+		str = "\n" + str;
+		try {
+			doc.insertString(doc.getLength(), str, attrSet);
+		} catch (BadLocationException e) {
+			System.out.println("BadLocationException:   " + e);
+		}
+	}
+
+	public static void errlog(String msg) {
+		Color originColor = textArea.getForeground();
+		textArea.setForeground(Color.RED);
+		textArea.append(getTime() + "\n" + msg + "\n");
+		textArea.paintImmediately(textArea.getBounds());
+		textArea.setForeground(originColor);
+	}
+
+	public static String getTime() {
 		SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSS");
 		Date current = new Date();
 		return sdFormat.format(current);
 	}
+
 	private void initConnect() {
 		Dom4j xml = new Dom4j();
 		for (String dbtype : startup()) {
@@ -276,7 +305,7 @@ public class UnitTestWindow {
 		String hasParamMethodNoTest = "";
 		METHOD type = null, exception = null;
 		int totalCount = classInfo.size(), successCount = 0, failCount = 0, hasParamCount = 0;
-		String result = "["+dbtype+"] has " + totalCount + " Unit test result by :\n";
+		String result = "[" + dbtype + "] has " + totalCount + " Unit test result by :\n";
 		if (dbtype.equals(MYSQL)) {
 			type = METHOD.MY;
 			exception = METHOD.MYEXC;
@@ -310,14 +339,14 @@ public class UnitTestWindow {
 
 	private TreeMap<String, HashMap<METHOD, Object>> getClassInfo() {
 		String[] paths = textPane.getText().split("\r");
-		KBSQL kb=new KBSQL();
-		TreeMap<String, HashMap<METHOD, Object>> data =null;
-		String[] pathList=kb.transPackageClass(paths);
-		if(userMode){
+		KBSQL kb = new KBSQL();
+		TreeMap<String, HashMap<METHOD, Object>> data = null;
+		String[] pathList = kb.transPackageClass(paths);
+		if (userMode) {
 			new Compile().run(paths);
-			data= kb.parseALLMethodsByUserMode(pathList);
-		}else{
-			data= kb.parseALLMethods(pathList);
+			data = kb.parseALLMethodsByUserMode(pathList);
+		} else {
+			data = kb.parseALLMethods(pathList);
 		}
 		return data;
 	}

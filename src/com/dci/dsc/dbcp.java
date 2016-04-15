@@ -28,7 +28,7 @@ public class dbcp {
 		} else if (dbtype .equals(ORACLE)) {
 			url = "jdbc:oracle:thin:@" + addr + ":" + port + ":" + dbname;
 		} else if (dbtype  .equals( MYSQL)) {
-			url = "jdbc:oracle:thin:@" + addr + ":" + port + ":" + dbname;
+			url = "jdbc:mysql://" + addr + ":" + port + "/" + dbname+"?useUnicode=true&characterEncoding=UTF-8";
 		}
 		return url;
 	}
@@ -40,7 +40,7 @@ public class dbcp {
 		} else if (dbtype == ORACLE) {
 			driverName = "oracle.jdbc.driver.OracleDriver";
 		} else if (dbtype == MYSQL) {
-			driverName = "oracle.jdbc.driver.OracleDriver";
+			driverName = "com.mysql.jdbc.Driver";
 		}
 		return driverName;
 	}

@@ -3,6 +3,7 @@ package com.dci;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TreeMap;
 
@@ -115,11 +116,13 @@ public class KBSQL {
 	public TreeMap<String, HashMap<METHOD, Object>> parseALLMethodsByUserMode(String[] packageClassPathNames) {
 		TreeMap<String, HashMap<METHOD, Object>> map = new TreeMap<String, HashMap<METHOD, Object>>();
 		String packageClassName = "";
+		ArrayList<String> errClassMsg=new ArrayList<String>();
 		for (int j = 0; j < packageClassPathNames.length; j++) {
 			packageClassName = packageClassPathNames[j];
 			if (packageClassName != null && !"".equals(packageClassName)) {
 				System.out.println("*packageClassName:" + packageClassName);
 				System.out.println("------------start--------");
+				
 				try {
 					String current=System.getProperty("user.dir").replace("\\", "/");
 					URL url = new URL("file:/"+current+"/KanBan/src/");//KanBan/src/
@@ -171,18 +174,24 @@ public class KBSQL {
 					System.out.println("******end*********");
 
 				} catch (Exception ex) {
+					errClassMsg.add(ex.getClass().getName()+":"+ex.getMessage());
 					ex.printStackTrace();
 				} finally {
-
 				}
 
 			}
 		}
+		errMsg(errClassMsg);
 		return map;
 		// str2json(map);
 		// str2listPython(map);
 	}
-
+	public void errMsg(ArrayList<String> errClassMsg){
+		UnitTestWindow.errlog("Total "+errClassMsg.size()+" classes exception :");
+		for(String str:errClassMsg){
+			UnitTestWindow.errlog((errClassMsg.indexOf(str)+1)+"."+errClassMsg);
+		}
+	}
 	public static void main(String[] agv) {
 		String[] data = { "com.dsc.dci.sqlcode.funcs.ekb.sqlPE001", "com.dsc.dci.sqlcode.main.sqlTask" };
 		KBSQL sql = new KBSQL();
